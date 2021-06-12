@@ -4,7 +4,7 @@
  */
 
 const Discord = require('discord.js')
-const db = require('../../db')
+const db = require('../../Database')
 
 module.exports = {
     name: 'query',
@@ -41,7 +41,8 @@ module.exports = {
 
             points += 1 * nextLvl[2]
         }
-        console.log(msgs,points,lvl,nextLvl)
+        console.log('nb_msgs = '+msgs+'  nb_points = '+points+'  level = '+lvl+'  next-level = '+nextLvl)
+        message.channel.send('nb_msgs = '+msgs+'  nb_points = '+points+'  level = '+lvl+'  next-level = '+nextLvl)
 
     }
 }

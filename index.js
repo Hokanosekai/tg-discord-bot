@@ -5,8 +5,8 @@
 
 const Discord = require('discord.js')
 const fs = require('fs');
-const { token,prefix,levels } = require('/root/botHoka/TGBot/config.json')
-const count_json  = require('/root/botHoka/TGBot/count.json')
+const { token,prefix,levels } = require('./config.json')
+const count_json  = require('./count.json')
 
 
 
@@ -19,16 +19,16 @@ const bot = new Discord.Client({disableEveryone: true});
 // There are two databases, one in the project (db.json) named
 // db in all the commentary
 // and one on the bot's vps named DB
-// The connection to the latter is recovered via the file (db.js)
+// The connection to the latter is recovered via the file (Database.js)
 // TODO : pass all the info from db to DB
 /*
-Get the DataBase connection (db.js)
+Get the DataBase connection (Database.js)
  */
-const db = require('./db')
+const db = require('./Database')
 /*
 Setup the database of the client from (db.json)
  */
-bot.db = require('/root/botHoka/TGBot/db.json')
+bot.db = require('./db.json')
 
 
 
@@ -42,7 +42,7 @@ bot.commands = new Discord.Collection()
 /*
 Retrieval of all categories and their commands
  */
-fs.readdir('/root/botHoka/TGBot/commands/', (err, folders) => {
+fs.readdir('/root/botsdiscord/tgbot/commands/', (err, folders) => {
     if (err) return console.error(err)
     /*
     For all folders / categories
@@ -51,20 +51,20 @@ fs.readdir('/root/botHoka/TGBot/commands/', (err, folders) => {
         /*
         Recovery of config files (.json) and command files (.js)
          */
-        const loadeds = fs.readdirSync(`/root/botHoka/TGBot/commands/${folder}`).filter(jsonfile => jsonfile.endsWith('.json'))
-        const files = fs.readdirSync(`/root/botHoka/TGBot/commands/${folder}/`).filter(file => file.endsWith('.js'))
+        const loadeds = fs.readdirSync(`/root/botsdiscord/tgbot/commands/${folder}`).filter(jsonfile => jsonfile.endsWith('.json'))
+        const files = fs.readdirSync(`/root/botsdiscord/tgbot/commands/${folder}/`).filter(file => file.endsWith('.js'))
 
         /*
         Get the constant if the category should be loaded
          */
-        const { loaded } = require(`./commands/${folder}/${loadeds}`)
+        const { loaded } = require(`/root/botsdiscord/tgbot/commands/${folder}/${loadeds}`)
         console.log('\x1b[34m',`↳___________/${folder}/_____________↴`,'\x1b[37m')
 
         /*
         For all command files
          */
         files.forEach(file => {
-            const command = require(`./commands/${folder}/${file}`)
+            const command = require(`/root/botsdiscord/tgbot/commands/${folder}/${file}`)
             /*
             If the category is not loaded
              */
@@ -79,7 +79,6 @@ fs.readdir('/root/botHoka/TGBot/commands/', (err, folders) => {
         })
     })
 })
-
 
 
 /*
@@ -97,17 +96,15 @@ bot.on('ready', () => {
     Set the activity of the client every 2sec
      */
     let i = 0
-    setInterval(() => {
-        /*
+    /*setInterval(() => {
+        /!*
         Select the count of insults in the DB
-         */
+         *!/
         db.query("SELECT COUNT(id) AS l FROM insultes", (err, res) => {
-
-            /*
+            /!*
             Select the count of insults said
-             */
+             *!/
             db.query("SELECT count FROM main", (err, rest) => {
-
                 const statuses = [
                     `${res[0].l} nombres d'insultes`,
                     `${rest[0].count} insultes dites`,
@@ -119,10 +116,8 @@ bot.on('ready', () => {
                 i = ++i % statuses.length
             })
         })
-    }, 2000)
+    }, 2000)*/
 });
-
-
 
 let answer
 /*
@@ -132,8 +127,7 @@ bot.on('message',async message => {
     /*
     If the author is a bot do nothing
      */
-    if (message.author.bot) return
-
+   
     /*
     If the message received isn't a command (didn't start with the prefix '&')
      */
@@ -189,7 +183,7 @@ bot.on('message',async message => {
             Add one to the count of insults said to the db
              */
             count_json.count += 1
-            fs.writeFileSync('/root/botHoka/TGBot/count.json', JSON.stringify(count_json))
+            fs.writeFileSync('./count.json', JSON.stringify(count_json))
 
             /*
             TODO : Level system (in progress)
@@ -249,20 +243,20 @@ bot.on('message',async message => {
             /*
             Add one to the count of insults said to the db
              */
-            count_json.count += 1
-            fs.writeFileSync('/root/botHoka/TGBot/count.json', JSON.stringify(count_json))
+            count_json.count += 1;
+            fs.writeFileSync('./count.json', JSON.stringify(count_json));
             /*
             Send the insults in the channel
              */
-            message.channel.send(answer)
+            message.channel.send(answer);
         }
 
     } else{
         /*
         If there is a prefix at the beginning of the message
          */
-        const args = message.content.slice(prefix.length).trim().split(/ +/)
-        const commandName = args.shift().toLowerCase()
+        const args = message.content.slice(prefix.length).trim().split(/ +/);
+        const commandName = args.shift().toLowerCase();
 
         /*
         Retrieval of the command from the client's commands collection
@@ -272,12 +266,12 @@ bot.on('message',async message => {
         /*
         If the command doesn't exist in the collection
          */
-        if (!command) return message.channel.send(new Discord.MessageEmbed().setTitle(`**Commande** \`${prefix}${commandName}\``))
+        if (!command) return message.channel.send(new Discord.MessageEmbed().setTitle(`**Commande** \`${prefix}${commandName}\``));
 
         /*
         If the command is send in dm do nothing
          */
-        if (message.channel.type === 'dm') return message.reply('I can\'t execute this command inside DM')
+        if (message.channel.type === 'dm') return message.reply('I can\'t execute this command inside DM');
 
         /*
         If the arguments of the command are incorrect
@@ -290,17 +284,16 @@ bot.on('message',async message => {
             if (command.usage){
                 param.setDescription(`${message.author}, Les arguments de la commande sont invalides \nVeuillez entrer des arguments du type\n\`${prefix}${command.name} ${command.usage}\``)
             }
-            message.delete()
-            message.channel.send(param)
+            message.channel.send(param);
         }
 
         /*
         Run the command
          */
         try{
-            command.run(message, args, bot)
+            command.run(message, args, bot, Discord);
         } catch (error) {
-            console.error(error)
+            console.error(error);
             message.channel.send(new Discord.MessageEmbed()
                 .setColor('#0099ff')
                 .setTitle(`**Commande** \`${prefix}${command.name}\``)

@@ -4,7 +4,7 @@
  */
 
 const Discord = require('discord.js')
-const db = require('../../db')
+const db = require('../../Database')
 
 module.exports = {
     name: "count",

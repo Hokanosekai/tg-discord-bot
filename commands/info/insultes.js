@@ -5,7 +5,7 @@
 
 const Discord = require('discord.js')
 const pagination = require('discord.js-pagination')
-const db = require('../../db')
+const db = require('../../Database')
 
 module.exports = {
     name: "insultes",

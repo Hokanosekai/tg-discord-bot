@@ -5,8 +5,8 @@
 
 const Discord = require('discord.js')
 const fs = require('fs')
-const { perm } = require('/root/botHoka/TGBot/config.json')
-const db = require('../../db')
+const { perm } = require('../../config.json')
+const db = require('../../Database')
 
 module.exports = {
     name: "removeuser",

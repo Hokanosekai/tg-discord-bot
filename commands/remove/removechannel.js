@@ -5,7 +5,7 @@
 
 const Discord = require('discord.js')
 const fs = require('fs')
-const { perm } = require('/root/botHoka/TGBot/config.json')
+const { perm } = require('../../config.json')
 
 module.exports = {
     name: "removechannel",

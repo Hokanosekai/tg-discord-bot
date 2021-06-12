@@ -26,14 +26,14 @@ module.exports = {
             const pages = []
 
 
-            const folders = fs.readdirSync('/root/botHoka/TGBot/commands').filter(folder => folder)
+            const folders = fs.readdirSync('/root/botsdiscord/tgbot/commands').filter(folder => folder)
             for(const folder of folders){
                 let help = new Discord.MessageEmbed()
                     .setTitle(`**Commande** \`${prefix}help\``)
                     .setColor('#0099ff')
 
-                const files = fs.readdirSync(`/root/botHoka/TGBot/commands/${folder}`).filter(file => file.endsWith('.js'))
-                const emotes = fs.readdirSync(`/root/botHoka/TGBot/commands/${folder}`).filter(file => file.endsWith('.json'))
+                const files = fs.readdirSync(`/root/botsdiscord/tgbot/commands/${folder}`).filter(file => file.endsWith('.js'))
+                const emotes = fs.readdirSync(`/root/botsdiscord/tgbot/commands/${folder}`).filter(file => file.endsWith('.json'))
 
                 const { emote, name, loaded } = require(`../../commands/${folder}/${emotes}`)
 

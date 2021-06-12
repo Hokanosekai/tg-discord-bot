@@ -4,7 +4,7 @@
  */
 
 const Discord = require('discord.js')
-const db = require('../../db')
+const db = require('../../Database')
 const { levels } = require('../../config.json')
 
 module.exports = {
@@ -61,9 +61,12 @@ module.exports = {
                 }
             }
 
-            levelEmbed.setDescription(`\n<@${tag}> :trident: **LEVEL ${lvl}** :trident:\n\n\n`)
+            const none = '<:tg_space:822537738024648704>'
+            const percent = (nb_message * 100) / nextLvl[1]
 
-            levelEmbed.addField(`**${lvl}** ---> **${nextLvl[0]}**  (${100-nbH}%)`, ` **[**${strLvl}**]**`)
+            levelEmbed.setDescription(`\n<@${tag}> ${none}${none}${none}${none}${none} :trident: **LEVEL ${lvl}** :trident:\n\n\n`)
+
+            levelEmbed.addField(`**${lvl}** ---> **${nextLvl[0]}**${none}${none}(${percent.toFixed(2)}%)`, ` **[**${strLvl}**]**`)
             levelEmbed.addField('Nombre de messages', `${nb_message}`, true)
             levelEmbed.addField('Nombre de Points', `${points}`,true)
 
