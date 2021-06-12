@@ -1,6 +1,4 @@
 {
-    "token":"ODM0MjE0Njc0MjI3NTI3NzIw.YH9o9Q.SDepLloUQ_syw7rIPehgcN-XDrc",
-    "prefix": "&",
     "perm": "SEND_MESSAGES",
     "url": "https://discord.com/api/oauth2/authorize?client_id=834214674227527720&permissions=8&scope=bot",
     "levels": [

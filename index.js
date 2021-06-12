@@ -5,10 +5,13 @@
 
 const Discord = require('discord.js')
 const fs = require('fs');
-const { token,prefix,levels } = require('./config.json')
+const { levels } = require('./config.json')
 const count_json  = require('./count.json')
 
+require('dotenv').config({path: '/root/botsdiscord/tgbot/.env'});
 
+const token = process.env.DISCORD_TOKEN
+const prefix = process.env.BOT_PREFIX
 
 /*
 Setup the client of the module Discord.js
