@@ -2,30 +2,27 @@
  * Copyright (c) 2021.
  * by Hokanosekai
  */
+const DataBase = require("../../Database");
+const Main = require("../../objects/Main");
 
-const Discord = require('discord.js')
-const db = require('../../Database')
+const Database = new DataBase();
+const db = Database.getConnection();
+
+const main = new Main(db);
 
 module.exports = {
     name: "count",
     description: "Affiche le nombres d'insultes dites par le bot",
-    cooldown: null,
-    usage: null,
 
-    run: async (message, bot, args) => {
-
-        message.delete()
-        //const { count } = require('/root/botHoka/TGBot/count.json')
-
-
-        db.query("SELECT * FROM main;", (err, res) => {
-            let count = new Discord.MessageEmbed()
+    run: async (message, bot, args, Discord) => {
+        main.getCount().then(count => {
+            let Embed = new Discord.MessageEmbed()
                 .setTitle('**Commande** `&count`')
                 .setFooter("demandé par @" + message.author.tag)
                 .setColor('#0099ff')
-                .setDescription(res[0].count+' insultes dites par le bot')
+                .setDescription(count+' insultes dites par le bot')
 
-            message.channel.send(count)
-        })
+            message.channel.send(Embed);
+        });
     }
 }

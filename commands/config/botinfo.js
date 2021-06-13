@@ -2,29 +2,21 @@
  * Copyright (c) 2021.
  * by Hokanosekai
  */
-
-const { MessageEmbed, version: djsversion } = require('discord.js');
+const { version: djsversion } = require('discord.js');
 const os = require('os')
 const ms = require('ms');
-const cpuStat = require("cpu-stat");
-const moment = require("moment")
-
- 
  
 module.exports = {
     name: 'botinfo',
     category: 'Config',
 	description: 'Information sur le bot',
 	aliases: ['bi'],
-	usage: null,
-    cooldown: null,
-    run: async (message, bot, args) => {
+
+    run: async (message, args, bot, Discord) => {
         
         let { version } = require("discord.js");
 
-        message.delete()
-
-        let embedStats = new MessageEmbed()
+        let embedStats = new Discord.MessageEmbed()
             .setTitle("__**Informations sur le bot**__")
             .setColor("RANDOM")
             .addField("Créateur du bot :", "@Hokanosekai#0755")
@@ -41,7 +33,7 @@ module.exports = {
             .addField("Language", "\`Javascript\`",true)
             .setFooter("HokanoSekai Bot")
     
-        message.channel.send(embedStats)
+        await message.channel.send(embedStats)
 
     }
 }

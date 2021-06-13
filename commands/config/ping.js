@@ -10,19 +10,16 @@ module.exports = {
     category: 'Config',
     description: 'Montre la latence du bot',
     aliases: ['p'],
-    guildOnly: true,
-    cooldown: null,
-    run: async (message, bot) => {
+
+    run: async (message, args, bot, Discord) => {
         let ping = new Discord.MessageEmbed()
             .setTitle('**Commande** `&ping`')
             .setDescription('je cherche')
             .setColor('#0099ff')
 
-        message.delete()
-
         const waiting = await message.channel.send(ping)
  
-        var pingEmbed = new Discord.MessageEmbed()
+        let pingEmbed = new Discord.MessageEmbed()
             .setTitle('**Commande** `&ping`')
             .setColor('#0099ff')
             .setDescription("Latence du bot et de l'api discord.js")

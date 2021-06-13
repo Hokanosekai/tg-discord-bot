@@ -4,15 +4,14 @@
  */
 
 const Discord = require('discord.js')
-const db = require('../../Database')
+const db = require('../Database')
 
 module.exports = {
     name: 'setallinsultes',
     description: 'set insultes in db',
-    usage: null,
 
     run: async (message, args, bot) => {
-        const { insultes } = require('../../db.json')
+        const { insultes } = require('../db.json')
         const exec = message.member
 
         insultes.forEach(ins => {

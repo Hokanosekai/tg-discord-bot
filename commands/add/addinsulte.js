@@ -21,6 +21,8 @@ module.exports = {
         const exec = message.member
         const insulte = args.slice().join(' ')
 
+        console.log('test')
+
         let add = new Discord.MessageEmbed()
             .setTitle('**Commande** `&addinsulte`')
             .setFooter("demandé par @" + message.author.tag)
@@ -30,14 +32,15 @@ module.exports = {
 
         const none = ["@here", "@everyone", "amogus", "amongus", "among", "us", "ඞ", "sus", "амогус", "сус", "imposteur", "@TG"];
         none.forEach(non => {
+            console.log(insulte.includes(non))
             if (insulte.includes(non)) return message.channel.send(add.setDescription("Non c\'est pas bien"));
         })
 
         if (insulte.length > 100) return message.channel.send(add.setDescription("Non c\'est pas bien"));
 
         insult.addInsult(insulte, exec.user.tag).then(r => {
-            if (r === 'exist') return message.channel.send(add.setDescription("L'insulte à bien été enregistrée"));
-            return message.channel.send(add.setDescription("Cette insulte a déja été ajoutée"));
+            if (r === 'exist') return message.channel.send(add.setDescription("Cette insulte a déja été ajoutée"));
+            return message.channel.send(add.setDescription("L'insulte à bien été enregistrée"));
         });
     }
 }

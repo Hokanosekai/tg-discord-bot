@@ -2,68 +2,37 @@
  * Copyright (c) 2021.
  * by Hokanosekai
  */
+const DataBase = require("../../Database");
+const User = require("../../objects/User");
 
-const Discord = require('discord.js')
-const fs = require('fs')
-const { perm } = require('../../config.json')
-const db = require('../../Database')
+const Database = new DataBase();
+const db = Database.getConnection();
+
+const user = new User(db);
 
 module.exports = {
     name: "removeuser",
     description: "Remove a user from the list",
     aliases: ['rmu'],
     cooldown: null,
-    usage: "<@user>",
+    usage: "<n° of the user>",
     args: true,
 
-    run: async (message, args, bot) => {
-        const exec = message.member
-        //let users = bot.db.ids
-
-        message.delete()
+    run: async (message, args, bot, Discord) => {
+        const users = await user.getUser();
 
         let remove = new Discord.MessageEmbed()
             .setTitle('**Commande** `&removeuser`')
             .setFooter("demandé par @" + message.author.tag)
             .setColor('#0099ff')
 
-        if (!exec.hasPermission(perm)) return message.send(remove.setDescription('Vous n\'avez pas la permission d\'utiliser cette commande.'))
-
         if (!args || args.length > 1) return message.send(remove.setDescription('Veuillez renseigner corectement les arguments'))
 
-        db.query("SELECT * FROM users", (err, res) => {
-            let users = []
-            res.forEach(u => {
-                users.push(u.id)
-            })
-
-            console.log(users, args[0], users[args[0]-1])
-
-            if (users[args[0]-1]){
-                const sql = `DELETE FROM users WHERE id = ${args[0]}`
-                db.query(sql, (err, res) => {
-                    console.log(res.affectedRows)
-                    db.query("ALTER TABLE users DROP id", (err, res) => {
-                        if (err) throw err
-                    })
-                    db.query("ALTER TABLE  users ADD id INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST", (err, res) => {
-                        if (err) throw err
-                    })
-                    message.channel.send(remove.setDescription("Le membre à bien été supprimée"))
-                })
-            } else {
-                message.channel.send(remove.setDescription("Ce membre n'existe pas"))
-            }
-        })
-
-        // if (users[args[0]-1]){
-        //     const suppr = users[args[0]-1]
-        //     users.splice(args[0]-1,1)
-        //     fs.writeFileSync('/root/botHoka/TGBot/db.json', JSON.stringify(bot.db))
-        //     console.log("user remove ",suppr)
-        //     message.channel.send(remove.setDescription("L'user à bien été supprimée"))
-        // } else {
-        //     message.channel.send(remove.setDescription("Ce user n'existe pas"))
-        // }
+        if (users[args[0]-1]){
+            user.removeUser(args[0]).then(() => {
+                return message.channel.send(remove.setDescription("Le membre à bien été supprimée"));
+            });
+        }
+        else return message.channel.send(remove.setDescription("Ce membre n'existe pas"))
     }
 }

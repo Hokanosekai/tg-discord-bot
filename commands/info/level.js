@@ -2,9 +2,14 @@
  * Copyright (c) 2021.
  * by Hokanosekai
  */
+const DataBase = require("../../Database");
+const User = require("../../objects/User");
 
-const Discord = require('discord.js')
-const db = require('../../Database')
+const Database = new DataBase();
+const db = Database.getConnection();
+
+const user = new User(db);
+
 const { levels } = require('../../config.json')
 
 module.exports = {
@@ -14,35 +19,20 @@ module.exports = {
     usage: null,
     cooldown: null,
 
-    run: async (message, args, bot) => {
-
-        message.delete()
-
+    run: async (message, args, bot, Discord) => {
         const member = message.mentions.members.first()
         const levelEmbed = new Discord.MessageEmbed()
             .setTitle("**Commande** \`&level\`")
             .setColor("RANDOM")
 
         let nextLvl
-        let sql = ''
-        let tag = ''
 
-        if (!member) {
-            sql = `SELECT * FROM users WHERE id_users = ${message.author.id}`
-            tag = message.author.id
-        } else {
-            sql = `SELECT * FROM users WHERE id_users = ${member.id}`
-            tag = member.id
-        }
+        let id = member? member.id : message.author.id;
 
-        db.query(sql, (err, res) => {
-            if (err) throw err
-
-            let nb_message = res[0].nb_message
-            let points = res[0].points
-            let lvl = res[0].level
-
-            //console.log(nb_message,points,lvl)
+        user.getUser(id).then((res) => {
+            let nb_message = res.nb_message
+            let points = res.points
+            let lvl = res.level
 
             for (let i = 0; i < levels.length; i++) {
                 if (nb_message >= levels[i][1]){
@@ -64,7 +54,7 @@ module.exports = {
             const none = '<:tg_space:822537738024648704>'
             const percent = (nb_message * 100) / nextLvl[1]
 
-            levelEmbed.setDescription(`\n<@${tag}> ${none}${none}${none}${none}${none} :trident: **LEVEL ${lvl}** :trident:\n\n\n`)
+            levelEmbed.setDescription(`\n<@${id}> ${none}${none}${none}${none}${none} :trident: **LEVEL ${lvl}** :trident:\n\n\n`)
 
             levelEmbed.addField(`**${lvl}** ---> **${nextLvl[0]}**${none}${none}(${percent.toFixed(2)}%)`, ` **[**${strLvl}**]**`)
             levelEmbed.addField('Nombre de messages', `${nb_message}`, true)

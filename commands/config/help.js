@@ -2,9 +2,6 @@
  * Copyright (c) 2021.
  * by Hokanosekai
  */
-
-const { prefix } = require('../../config.json');
-const Discord = require('discord.js');
 const fs = require('fs');
 const pagination = require('discord.js-pagination')
 
@@ -14,12 +11,9 @@ module.exports = {
     description: 'List all commands or info about a specific command.',
     aliases: ['commands','h'],
     usage: '<command name>',
-    cooldown: 5,
 
-    run: async (message, args, bot) => {
+    run: async (message, args, bot, Discord) => {
         const { commands } = message.client;
-
-        message.delete()
 
         if (!args.length) {
 
@@ -29,7 +23,7 @@ module.exports = {
             const folders = fs.readdirSync('/root/botsdiscord/tgbot/commands').filter(folder => folder)
             for(const folder of folders){
                 let help = new Discord.MessageEmbed()
-                    .setTitle(`**Commande** \`${prefix}help\``)
+                    .setTitle(`**Commande** \`&help\``)
                     .setColor('#0099ff')
 
                 const files = fs.readdirSync(`/root/botsdiscord/tgbot/commands/${folder}`).filter(file => file.endsWith('.js'))
@@ -39,7 +33,7 @@ module.exports = {
 
                 let all = []
                 files.forEach(file => {
-                    all.push(prefix+file.substr(0,file.length-3))
+                    all.push('&'+file.substr(0,file.length-3))
                 })
 
                 all = all.join("\n")
@@ -47,7 +41,7 @@ module.exports = {
                 if(loaded){
                     help.addField(`${emote} ---- ${name} ---- ${emote}`,'\`'+all+'\n\`')
                 }
-                help.addField(`\nYou can view a specific command in send`,`\`${prefix}help <command name>\``);
+                help.addField(`\nYou can view a specific command in send`,`\`&help <command name>\``);
                 pages.push(help)
             }
 
@@ -71,13 +65,13 @@ module.exports = {
             return message.channel.send(help);
         }
 
-        if (command.name) help.setTitle(`**Commande** \`${prefix}${command.name}\``)
+        if (command.name) help.setTitle(`**Commande** \`&${command.name}\``)
         if (command.category) help.addField(`:file_folder: Catégory :file_folder: :\n`,`${command.category}\n`);
         if (command.aliases) help.addField(`:congratulations: Aliases :congratulations: :\n`,`${command.aliases.join(', ')}\n`);
         if (command.description) help.addField(`:pencil: Description :pencil: :\n`,`${command.description}\n`);
-        if (command.usage) help.addField(`:keyboard: Usage :keyboard: :\n`,`\`${prefix}${command.name} ${command.usage}\`\n`);
+        if (command.usage) help.addField(`:keyboard: Usage :keyboard: :\n`,`\`&${command.name} ${command.usage}\`\n`);
         if (command.cooldown) help.addField(`:timer: Cooldown :timer: :\n`,`${command.cooldown || 3} secondes`);
 
-        message.channel.send(help);
+        await message.channel.send(help);
     },
 };
