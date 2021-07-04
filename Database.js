@@ -7,10 +7,10 @@ const mysql = require('mysql')
 
 class Database {
     conn
-    host = '178.32.252.139'
-    user = 'root'
-    password = 'V5miuq3hsRkGL32'
-    database = 'tg_bot'
+    host = ''
+    user = ''
+    password = ''
+    database = ''
 
     constructor() {
         this.conn = mysql.createConnection({
